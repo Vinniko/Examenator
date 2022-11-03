@@ -1,0 +1,7 @@
+<button (mousedown)="increment()" (mouseup)="resetFlag()" (touchstart)="increment()" (touchend)="resetFlag()">Increment</button>
+
+<div>Current Count: {{ count$ | async }}</div>
+
+<button (mousedown)="decrement()" (mouseup)="resetFlag()" (touchstart)="decrement()" (touchend)="resetFlag()">Decrement</button>
+
+<button (click)="reset()">Reset Counter</button>
