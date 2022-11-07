@@ -1,15 +1,13 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
+import { AnswerComponent } from './components/answer/answer.component';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { CounterComponent } from './components/counter/counter.component';
 import { ExamComponent } from './components/exam/exam.component';
 import { QuestionComponent } from './components/question/question.component';
-import { AnswerComponent } from './components/answer/answer.component';
-import { CounterComponent } from './components/counter/counter.component';
-
-import { reducers, metaReducers } from './store';
+import { metaReducers, reducers } from './store';
 
 @NgModule({
   declarations: [
@@ -17,14 +15,14 @@ import { reducers, metaReducers } from './store';
     ExamComponent,
     QuestionComponent,
     AnswerComponent,
-    CounterComponent
+    CounterComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot(reducers, { metaReducers })
+    StoreModule.forRoot(reducers, { metaReducers }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
