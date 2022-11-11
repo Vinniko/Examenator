@@ -1,0 +1,101 @@
+[
+  {
+    "id": 1,
+    "name": "\"Основы программирования\"",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Какая длина у типа long?",
+        "points": 3,
+        "answers": [
+          {
+            "id": 1,
+            "text": "8 байт",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 2,
+            "text": "4 байта",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 3,
+            "text": "16 байт",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 4,
+            "text": "24 байта",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "text": "Какая доступность у поля класса с модификатором protected?",
+        "points": 3,
+        "answers": [
+          {
+            "id": 5,
+            "text": "Доступно только внутри класса",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 6,
+            "text": "Доступно внутри класса и у его потомков",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 7,
+            "text": "Доступно везде",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 8,
+            "text": "Поля класса всегда доступны снаружи и им не требуется модификатор",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "text": "Какой из принципов не является частью S.O.L.I.D.?",
+        "points": 3,
+        "answers": [
+          {
+            "id": 9,
+            "text": "Singleton",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 10,
+            "text": "Liskov Substitution",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 11,
+            "text": "Dependency Injection",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 12,
+            "text": "Open/Close",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      }
+    ]
+  }
+]

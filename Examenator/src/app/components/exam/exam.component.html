@@ -1,1 +1,35 @@
-<p>exam works!</p>
+<div *ngFor="let exam of (examState$ | async)?.exams">
+  <h1>Экзамен {{ exam.name }}</h1>
+
+  <button *ngIf="!isExamStarted(exam) && !isExamCompleted(exam)" (click)="selectExam(exam)">Начать</button>
+
+  <div *ngIf="isExamStarted(exam) && !isExamCompleted(exam)">
+    <div *ngFor="let question of exam?.questions">
+      <h3>{{question.text}}</h3>
+
+      <div *ngFor="let answer of question.answers">
+        <input
+          id="{{answer.id}}"
+          name="{{question.id}}"
+          type="radio"
+          value="{{answer.id}}"
+          name="radio-input"
+          [checked]="isAnswerSelected(exam, question, answer)"
+          (click)="selectAnswer(exam, question, answer)"
+        >
+        <label for="{{answer.id}}"> {{answer.text}}</label>
+      </div>
+    </div>
+
+    <button  (click)="compliteExam(exam)">Завершить</button>
+  </div>
+
+  <div *ngIf="isExamCompleted(exam)">
+    <h3>Вы завершили экзамен!</h3>
+    <h5>Корректно отвечено вопросов:  {{ getCompletedExamCorrectQuestions(exam) }}</h5>
+    <h5>Некорректно отвечено вопросов: {{ getCompletedExamUnCorrectQuestions(exam) }}</h5>
+    <h5>Итоговая оценка: {{ getCompletedExamScore(exam) }}</h5>
+  </div>
+</div>
+
+
