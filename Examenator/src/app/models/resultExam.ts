@@ -3,10 +3,18 @@ export interface QuestionResult {
   answerId: number | null,
 }
 
+export interface AnswerHistory {
+  questionId: number,
+  answerId: number,
+  isCorrect: boolean,
+}
+
 export class ResultExam {
   examId: number;
 
   questions: QuestionResult[];
+
+  answerHistory: AnswerHistory[] = [];
 
   isComplete: boolean;
 
@@ -14,9 +22,11 @@ export class ResultExam {
 
   correctAnswers: number = 0;
 
-  constructor(examId: number, questions: QuestionResult[], isComplete: boolean) {
+  // eslint-disable-next-line max-len
+  constructor(examId: number, questions: QuestionResult[], isComplete: boolean, history: AnswerHistory[] = []) {
     this.examId = examId;
     this.questions = questions;
     this.isComplete = isComplete;
+    this.answerHistory = history;
   }
 }

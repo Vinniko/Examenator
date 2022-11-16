@@ -2,14 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { setExams } from 'src/app/store/exam/exam.actions';
-import { select, answer as setAnswer, complite } from 'src/app/store/result/result.actions';
+import {
+  select, answer as setAnswer, complite, reset,
+} from 'src/app/store/result/result.actions';
 import { ExamState } from 'src/app/store/exam/exam.reducer';
 import data from 'src/assets/data/data.json';
 import { Exam } from 'src/app/models/exam';
 import { Result } from 'src/app/models/result';
 import { ResultState } from 'src/app/store/result/result.reducer';
-import { Question } from 'src/app/models/question';
 import { Answer } from 'src/app/models/answer';
+import { AnswerHistory } from 'src/app/models/resultExam';
+import { IQuestion, QUESTION_TYPE_MULTIPLE } from 'src/app/interfaces/IQuestion';
+import { MultipleQuestion } from 'src/app/models/multipleQuestion';
+import { BaseQuestion } from 'src/app/models/baseQuestion';
 
 @Component({
   selector: 'app-exam',
@@ -30,7 +35,37 @@ export class ExamComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(setExams({ exams: data }));
+    const examsData = data;
+    const exams: Exam[] = [];
+
+    examsData.forEach((examData) => {
+      const questions: IQuestion[] = [];
+      examData.questions.forEach((questionData) => {
+        if (questionData.type === QUESTION_TYPE_MULTIPLE) {
+          questions.push(
+            new MultipleQuestion(
+              questionData.id,
+              questionData.text,
+              questionData.points,
+              questionData.answers,
+            ),
+          );
+        } else {
+          questions.push(
+            new BaseQuestion(
+              questionData.id,
+              questionData.text,
+              questionData.points,
+              questionData.answers,
+            ),
+          );
+        }
+      });
+
+      exams.push(new Exam(examData.id, examData.name, questions));
+    });
+
+    this.store.dispatch(setExams({ exams }));
   }
 
   selectExam(exam: Exam): void {
@@ -45,17 +80,21 @@ export class ExamComponent implements OnInit {
     return false;
   }
 
-  selectAnswer(exam: Exam, question: Question, answer: Answer): void {
+  selectAnswer(exam: Exam, question: IQuestion, answer: Answer): void {
     if (!this.isExamStarted(exam)) {
       this.selectExam(exam);
     }
 
+    const isCorrect = !!question?.answers.find((aw) => (aw.id === answer.id && answer.isCorrect));
+
     this.store.dispatch(
-      setAnswer({ examId: exam.id, questionId: question.id, answerId: answer.id }),
+      setAnswer({
+        exam, questionId: question.id, answerId: answer.id, isCorrect,
+      }),
     );
   }
 
-  isAnswerSelected(exam: Exam, question: Question, answer: Answer): boolean {
+  isAnswerSelected(exam: Exam, question: IQuestion, answer: Answer): boolean {
     if (this.result) {
       const tmpExam = this.result.exams.find((resultExam) => resultExam.examId === exam.id);
       return !!tmpExam?.questions.find(
@@ -75,13 +114,21 @@ export class ExamComponent implements OnInit {
       let score = 0;
       let correctAnswers = 0;
 
-      tmpExamResult?.questions.forEach((tmpQuestion) => {
-        const question = exam.questions.find((qn) => qn.id === tmpQuestion.questionId);
-        const answer = question?.answers.find((aw) => aw.id === tmpQuestion.answerId);
+      exam.questions.forEach((question) => {
+        if (question instanceof BaseQuestion) {
+          const examAnswerId = tmpExamResult?.questions
+            .find((qn) => qn.questionId === question.id)?.answerId;
+          score += question.getScore(examAnswerId);
+          correctAnswers += question.isCorrectQuestion(examAnswerId) ? 1 : 0;
+        }
 
-        if (answer?.isCorrect) {
-          score += question?.points ?? 0;
-          correctAnswers += 1;
+        if (question instanceof MultipleQuestion) {
+          const examAnswers = tmpExamResult?.questions
+            .filter((qn) => qn.questionId === question.id)
+            .map((qnr) => qnr.answerId)
+            .filter((aid) => !!aid);
+          score += question.getScore(examAnswers);
+          correctAnswers += question.isCorrectQuestion(examAnswers) ? 1 : 0;
         }
       });
 
@@ -117,7 +164,7 @@ export class ExamComponent implements OnInit {
         (resultExam) => (resultExam.examId === exam.id && resultExam.isComplete),
       );
 
-      return (tmpExam?.questions.length ?? 0) - (tmpExam?.correctAnswers ?? 0);
+      return (exam.questions.length ?? 0) - (tmpExam?.correctAnswers ?? 0);
     }
 
     return 0;
@@ -133,7 +180,37 @@ export class ExamComponent implements OnInit {
     return 0;
   }
 
-  // resetExam(exam: Exam): void {
+  resetExam(exam: Exam): void {
+    this.store.dispatch(
+      reset({ examId: exam.id }),
+    );
+  }
 
-  // }
+  getQuestionAnswerHistory(exam: Exam, question: IQuestion): Answer[] {
+    if (this.result) {
+      const questionAnswers = question.answers;
+      const tmpExam = this.result.exams.find((resultExam) => resultExam.examId === exam.id);
+      const answerHistory: AnswerHistory[] = [];
+
+      tmpExam?.answerHistory.forEach((historyElement) => {
+        if (historyElement.questionId === question.id) {
+          answerHistory.push(historyElement);
+        }
+      });
+
+      const result: Answer[] = [];
+
+      answerHistory.forEach((element) => {
+        const tmpAnswer = questionAnswers.find((answ) => answ.id === element.answerId);
+
+        if (tmpAnswer) {
+          result.push(tmpAnswer);
+        }
+      });
+
+      return result;
+    }
+
+    return [];
+  }
 }

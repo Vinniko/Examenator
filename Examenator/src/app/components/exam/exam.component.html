@@ -14,6 +14,17 @@
           type="radio"
           value="{{answer.id}}"
           name="radio-input"
+          *ngIf="question.type === 'base'"
+          [checked]="isAnswerSelected(exam, question, answer)"
+          (click)="selectAnswer(exam, question, answer)"
+        >
+
+        <input
+          id="{{answer.id}}"
+          type="checkbox"
+          value="{{answer.id}}"
+          name="radio-input"
+          *ngIf="question.type === 'multiple'"
           [checked]="isAnswerSelected(exam, question, answer)"
           (click)="selectAnswer(exam, question, answer)"
         >
@@ -26,9 +37,26 @@
 
   <div *ngIf="isExamCompleted(exam)">
     <h3>Вы завершили экзамен!</h3>
+
     <h5>Корректно отвечено вопросов:  {{ getCompletedExamCorrectQuestions(exam) }}</h5>
+
     <h5>Некорректно отвечено вопросов: {{ getCompletedExamUnCorrectQuestions(exam) }}</h5>
+
     <h5>Итоговая оценка: {{ getCompletedExamScore(exam) }}</h5>
+
+    <h4> История ответов: </h4>
+
+    <div *ngFor="let question of exam?.questions;index as questionIndex">
+      <h5>Вопрос {{ questionIndex + 1 }}: {{ question.text }} </h5>
+
+      <h5>Ответы: </h5>
+
+      <div *ngFor="let answer of getQuestionAnswerHistory(exam, question);index as answerIndex">
+        <p>{{ answerIndex + 1 }}: {{ answer.text }} Корректный: {{ answer.isCorrect ? 'Да' : 'Нет' }}</p>
+      </div>
+      <br>
+    </div>
+    <button (click)="resetExam(exam)">Сбросить результаты</button>
   </div>
 </div>
 

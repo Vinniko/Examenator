@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Exam } from 'src/app/models/exam';
 
-export const select = createAction('Set Exam result', props<{ exam: Exam }>());
-export const answer = createAction('Select answer in question', props<{ examId: number, questionId: number, answerId: number }>());
-export const complite = createAction('Complete exam', props<{ examId: number, score: number, correctAnswers: number }>());
+export const select = createAction('[Result] Set Exam result', props<{ exam: Exam }>());
+export const answer = createAction('[Result] Select answer in question', props<{ exam: Exam, questionId: number, answerId: number, isCorrect: boolean }>());
+export const complite = createAction('[Result] Complete exam', props<{ examId: number, score: number, correctAnswers: number }>());
+export const reset = createAction('[Result] Reset Exam result', props<{ examId: number }>());

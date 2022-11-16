@@ -1,8 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
 import { Exam } from 'src/app/models/exam';
+import { QUESTION_TYPE_BASE, QUESTION_TYPE_MULTIPLE } from 'src/app/interfaces/IQuestion';
 import { Result } from 'src/app/models/result';
 import { ResultExam, QuestionResult } from 'src/app/models/resultExam';
-import { select, answer, complite } from './result.actions';
+import {
+  select, answer, complite, reset,
+} from './result.actions';
 
 export interface ResultState {
   result: Result;
@@ -14,17 +17,28 @@ export const initialResultState: ResultState = {
 
 const selectExam = (state: ResultState, { exam }: { exam: Exam }) => {
   const tmpExams: ResultExam[] = [];
-  tmpExams.push(new ResultExam(exam.id, [], false));
+  const tmpQuestions: QuestionResult[] = [];
+
+  exam.questions.forEach((question) => {
+    tmpQuestions.push({
+      questionId: question.id,
+      answerId: null,
+    });
+  });
+
+  tmpExams.push(new ResultExam(exam.id, tmpQuestions, false));
 
   return { ...state, result: new Result(0, '', tmpExams) };
 };
 
 const answerOnQuestion = (
   state: ResultState,
-  { examId, questionId, answerId }: { examId: number, questionId: number, answerId: number },
+  {
+    exam, questionId, answerId, isCorrect,
+  }: { exam: Exam, questionId: number, answerId: number, isCorrect: boolean },
 ) => {
   const tmpExams: ResultExam[] = [...state.result.exams];
-  const examIndex = tmpExams.findIndex((exam) => exam.examId === examId);
+  const examIndex = tmpExams.findIndex((ex) => ex.examId === exam.id);
 
   if (examIndex === -1) {
     return { ...state };
@@ -32,20 +46,41 @@ const answerOnQuestion = (
 
   const tmpExam: ResultExam = tmpExams[examIndex];
   const tmpQuestions: QuestionResult[] = [...tmpExam.questions];
-  const questionIndex = tmpQuestions.findIndex((question) => question.questionId === questionId);
+  const history = [...tmpExam.answerHistory];
+  history.push({
+    questionId,
+    answerId,
+    isCorrect,
+  });
+
+  const question = exam.questions.find((qn) => qn.id === questionId);
+  let questionIndex = -1;
+
+  if (question?.type === QUESTION_TYPE_BASE) {
+    questionIndex = tmpQuestions.findIndex((qn) => qn.questionId === questionId);
+  } else if (question?.type === QUESTION_TYPE_MULTIPLE) {
+    questionIndex = tmpQuestions.findIndex(
+      (qn) => (qn.questionId === questionId && qn.answerId === answerId),
+    );
+  }
 
   if (questionIndex === -1) {
     tmpQuestions.push({
       questionId,
       answerId,
     });
-    tmpExams[examIndex] = { ...tmpExam, questions: tmpQuestions };
+    tmpExams[examIndex] = { ...tmpExam, questions: tmpQuestions, answerHistory: history };
   } else {
-    tmpQuestions[questionIndex] = {
-      questionId,
-      answerId,
-    };
-    tmpExams[examIndex] = { ...tmpExam, questions: tmpQuestions };
+    if (question?.type === QUESTION_TYPE_MULTIPLE) {
+      tmpQuestions.splice(questionIndex, 1);
+    } else {
+      tmpQuestions[questionIndex] = {
+        questionId,
+        answerId,
+      };
+    }
+
+    tmpExams[examIndex] = { ...tmpExam, questions: tmpQuestions, answerHistory: history };
   }
 
   return { ...state, result: new Result(0, '', tmpExams) };
@@ -71,9 +106,23 @@ const completeExam = (
   return { ...state, result: new Result(0, '', tmpExams) };
 };
 
+const resetExam = (state: ResultState, { examId } : { examId: number }) => {
+  const tmpExams: ResultExam[] = [...state.result.exams];
+  const examIndex = tmpExams.findIndex((exam) => exam.examId === examId);
+
+  if (examIndex === -1) {
+    return { ...state };
+  }
+
+  tmpExams.splice(examIndex, 1);
+
+  return { ...state, result: new Result(0, '', tmpExams) };
+};
+
 export const resultReducer = createReducer(
   initialResultState,
   on(select, selectExam),
   on(answer, answerOnQuestion),
   on(complite, completeExam),
+  on(reset, resetExam),
 );

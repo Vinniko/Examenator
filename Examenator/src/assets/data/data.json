@@ -7,6 +7,7 @@
         "id": 1,
         "text": "Какая длина у типа long?",
         "points": 3,
+        "type": "base",
         "answers": [
           {
             "id": 1,
@@ -38,6 +39,7 @@
         "id": 2,
         "text": "Какая доступность у поля класса с модификатором protected?",
         "points": 3,
+        "type": "base",
         "answers": [
           {
             "id": 5,
@@ -69,6 +71,7 @@
         "id": 3,
         "text": "Какой из принципов не является частью S.O.L.I.D.?",
         "points": 3,
+        "type": "base",
         "answers": [
           {
             "id": 9,
@@ -92,6 +95,38 @@
             "id": 12,
             "text": "Open/Close",
             "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "text": "Какие типы данных есть в JavaScript?",
+        "points": 1.5,
+        "type": "multiple",
+        "answers": [
+          {
+            "id": 13,
+            "text": "numeric",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 14,
+            "text": "integer",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 15,
+            "text": "float",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 16,
+            "text": "string",
+            "isCorrect": true,
             "isSelected": false
           }
         ]
