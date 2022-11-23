@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { CounterComponent } from './components/counter/counter.component';
 import { ExamComponent } from './components/exam/exam.component';
 import { metaReducers, reducers } from './store';
+import { MainComponent } from './components/main/main.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ExamComponent,
     CounterComponent,
+    MainComponent,
   ],
   imports: [
     BrowserModule,

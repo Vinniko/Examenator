@@ -19,6 +19,10 @@ const selectExam = (state: ResultState, { exam }: { exam: Exam }) => {
   const tmpExams: ResultExam[] = [];
   const tmpQuestions: QuestionResult[] = [];
 
+  state.result.exams.forEach((ex: ResultExam) => {
+    tmpExams.push(ex);
+  });
+
   exam.questions.forEach((question) => {
     tmpQuestions.push({
       questionId: question.id,

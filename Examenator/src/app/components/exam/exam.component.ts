@@ -1,71 +1,55 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { setExams } from 'src/app/store/exam/exam.actions';
 import {
   select, answer as setAnswer, complite, reset,
 } from 'src/app/store/result/result.actions';
 import { ExamState } from 'src/app/store/exam/exam.reducer';
-import data from 'src/assets/data/data.json';
 import { Exam } from 'src/app/models/exam';
 import { Result } from 'src/app/models/result';
 import { ResultState } from 'src/app/store/result/result.reducer';
 import { Answer } from 'src/app/models/answer';
 import { AnswerHistory } from 'src/app/models/resultExam';
-import { IQuestion, QUESTION_TYPE_MULTIPLE } from 'src/app/interfaces/IQuestion';
-import { MultipleQuestion } from 'src/app/models/multipleQuestion';
-import { BaseQuestion } from 'src/app/models/baseQuestion';
+import { IQuestion } from 'src/app/interfaces/IQuestion';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-exam',
   templateUrl: './exam.component.html',
   styleUrls: ['./exam.component.css'],
 })
-export class ExamComponent implements OnInit {
+export class ExamComponent {
   examState$: Observable<ExamState>;
 
   resultState$: Observable<ResultState>;
 
   result: Result | null = null;
 
-  constructor(private store: Store<{ exams: ExamState, result: ResultState }>) {
+  exams: Exam[] | [] = [];
+
+  exam: Exam;
+
+  constructor(
+    private store: Store<{ exams: ExamState, result: ResultState }>,
+    private activateRoute: ActivatedRoute,
+    private router: Router,
+  ) {
     this.examState$ = store.select('exams');
     this.resultState$ = store.select('result');
     this.resultState$.subscribe((res: ResultState) => { this.result = res.result; });
-  }
+    this.examState$.subscribe((ex: ExamState) => { this.exams = ex.exams; });
+    const examId = Number(activateRoute.snapshot.params['id']);
+    const exam = this.exams.find((ex: Exam) => ex.id === examId);
+    if (exam) {
+      this.exam = exam;
 
-  ngOnInit(): void {
-    const examsData = data;
-    const exams: Exam[] = [];
-
-    examsData.forEach((examData) => {
-      const questions: IQuestion[] = [];
-      examData.questions.forEach((questionData) => {
-        if (questionData.type === QUESTION_TYPE_MULTIPLE) {
-          questions.push(
-            new MultipleQuestion(
-              questionData.id,
-              questionData.text,
-              questionData.points,
-              questionData.answers,
-            ),
-          );
-        } else {
-          questions.push(
-            new BaseQuestion(
-              questionData.id,
-              questionData.text,
-              questionData.points,
-              questionData.answers,
-            ),
-          );
-        }
-      });
-
-      exams.push(new Exam(examData.id, examData.name, questions));
-    });
-
-    this.store.dispatch(setExams({ exams }));
+      if (!this.isExamStarted(exam) && !this.isExamCompleted(exam)) {
+        this.selectExam(exam);
+      }
+    } else {
+      this.exam = new Exam(0, '', []);
+      this.router.navigate(['/']);
+    }
   }
 
   selectExam(exam: Exam): void {
@@ -111,29 +95,13 @@ export class ExamComponent implements OnInit {
   compliteExam(exam: Exam): void {
     if (this.result) {
       const tmpExamResult = this.result.exams.find((findExam) => findExam.examId === exam.id);
-      let score = 0;
-      let correctAnswers = 0;
-
-      exam.questions.forEach((question) => {
-        if (question instanceof BaseQuestion) {
-          const examAnswerId = tmpExamResult?.questions
-            .find((qn) => qn.questionId === question.id)?.answerId;
-          score += question.getScore(examAnswerId);
-          correctAnswers += question.isCorrectQuestion(examAnswerId) ? 1 : 0;
-        }
-
-        if (question instanceof MultipleQuestion) {
-          const examAnswers = tmpExamResult?.questions
-            .filter((qn) => qn.questionId === question.id)
-            .map((qnr) => qnr.answerId)
-            .filter((aid) => !!aid);
-          score += question.getScore(examAnswers);
-          correctAnswers += question.isCorrectQuestion(examAnswers) ? 1 : 0;
-        }
-      });
+      const result = (
+        exam.evaluateResults
+        && exam.evaluateResults(tmpExamResult?.questions)
+      ) ?? { score: 0, correctAnswers: 0 };
 
       this.store.dispatch(
-        complite({ examId: exam.id, score, correctAnswers }),
+        complite({ examId: exam.id, ...result }),
       );
     }
   }
@@ -184,6 +152,7 @@ export class ExamComponent implements OnInit {
     this.store.dispatch(
       reset({ examId: exam.id }),
     );
+    this.router.navigate(['/']);
   }
 
   getQuestionAnswerHistory(exam: Exam, question: IQuestion): Answer[] {

@@ -1,0 +1,32 @@
+<div>
+  <h1>Экзамены:</h1>
+
+  <div *ngFor="let exam of (examState$ | async)?.exams">
+    <h3>{{ exam.name }}</h3>
+
+    <a
+      *ngIf="!isExamStarted(exam)"
+      [routerLink]="['/exam', exam.id]"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+    >
+      Начать
+    </a>
+
+    <a
+      *ngIf="isExamStarted(exam) && !isExamCompleted(exam)"
+      [routerLink]="['/exam', exam.id]"
+    >
+      Продолжить
+    </a>
+
+    <a
+      *ngIf="isExamCompleted(exam)"
+      [routerLink]="['/exam', exam.id]"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+    >
+      Посмотреть результаты
+    </a>
+  </div>
+</div>

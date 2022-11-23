@@ -1,7 +1,5 @@
-<div *ngFor="let exam of (examState$ | async)?.exams">
+<div>
   <h1>Экзамен {{ exam.name }}</h1>
-
-  <button *ngIf="!isExamStarted(exam) && !isExamCompleted(exam)" (click)="selectExam(exam)">Начать</button>
 
   <div *ngIf="isExamStarted(exam) && !isExamCompleted(exam)">
     <div *ngFor="let question of exam?.questions">
@@ -58,6 +56,14 @@
     </div>
     <button (click)="resetExam(exam)">Сбросить результаты</button>
   </div>
+
+  <a
+      [routerLink]="['/']"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+    >
+      Назад
+    </a>
 </div>
 
 
