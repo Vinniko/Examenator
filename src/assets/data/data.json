@@ -1,0 +1,394 @@
+[
+  {
+    "id": 1,
+    "name": "\"Основы программирования\"",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Какая длина у типа long?",
+        "points": 3,
+        "type": "base",
+        "answers": [
+          {
+            "id": 1,
+            "text": "8 байт",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 2,
+            "text": "4 байта",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 3,
+            "text": "16 байт",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 4,
+            "text": "24 байта",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "text": "Какая доступность у поля класса с модификатором protected?",
+        "points": 3,
+        "type": "base",
+        "answers": [
+          {
+            "id": 5,
+            "text": "Доступно только внутри класса",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 6,
+            "text": "Доступно внутри класса и у его потомков",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 7,
+            "text": "Доступно везде",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 8,
+            "text": "Поля класса всегда доступны снаружи и им не требуется модификатор",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "text": "Какой из принципов не является частью S.O.L.I.D.?",
+        "points": 3,
+        "type": "base",
+        "answers": [
+          {
+            "id": 9,
+            "text": "Singleton",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 10,
+            "text": "Liskov Substitution",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 11,
+            "text": "Dependency Injection",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 12,
+            "text": "Open/Close",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "text": "Какие типы данных есть в JavaScript?",
+        "points": 1.5,
+        "type": "multiple",
+        "answers": [
+          {
+            "id": 13,
+            "text": "numeric",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 14,
+            "text": "integer",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 15,
+            "text": "float",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 16,
+            "text": "string",
+            "isCorrect": true,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "text": "Какие типы данных есть в JavaScript?",
+        "points": 1.5,
+        "type": "multiple",
+        "answers": [
+          {
+            "id": 13,
+            "text": "numeric",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 14,
+            "text": "integer",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 15,
+            "text": "float",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 16,
+            "text": "string",
+            "isCorrect": true,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "text": "Какой спецификатор говорит о том, что переменная неизменяемая?",
+        "points": 3,
+        "type": "text",
+        "answers": [
+          {
+            "id": 40,
+            "text": "const",
+            "isCorrect": true,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "text": "Как называется программа, которая переводит программный код в машинный?",
+        "points": 3,
+        "type": "text",
+        "answers": [
+          {
+            "id": 41,
+            "text": "компилятор",
+            "isCorrect": true,
+            "isSelected": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "\"Базы данных\"",
+    "questions": [
+      {
+        "id": 5,
+        "text": "Какие из указанных СУБД являются реляционными?",
+        "points": 3,
+        "type": "multiple",
+        "answers": [
+          {
+            "id": 17,
+            "text": "MySQL",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 18,
+            "text": "PostgreSQL",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 19,
+            "text": "ClickHouse",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 20,
+            "text": "Redis",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "text": "Что делает операция TRUNCATE TABLE?",
+        "points": 3,
+        "type": "base",
+        "answers": [
+          {
+            "id": 21,
+            "text": "Создает таблицу",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 22,
+            "text": "Удаляет таблицу со всеми её данными",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 23,
+            "text": "Сжимает таблицу",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 24,
+            "text": "Удаляет все данные в таблице",
+            "isCorrect": true,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "text": "Какая градация нормализации реляционных баз данных правильная?",
+        "points": 3,
+        "type": "base",
+        "answers": [
+          {
+            "id": 25,
+            "text": "Первая нормальная форма, Вторая нормальная форма, Третья нормальная форма, Нормальная форма Бойса-Кодда, Четвёртая нормальная форма, Пятая нормальная форма",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 26,
+            "text": "Плохо нормализованная, Достаточно нормализованная, Плохо нормализованная",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 27,
+            "text": "Первая нормальная форма, Вторая нормальная форма, Третья нормальная форма, Четвёртая нормальная форма, Пятая нормальная форма",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 28,
+            "text": "Первая нормальная форма, Вторая нормальная форма, Нормальная форма Бойса-Кодда, Четвёртая нормальная форма, Пятая нормальная форма",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "\"Web\"",
+    "questions": [
+      {
+        "id": 8,
+        "text": "Какой архитектурный паттерн чаще всего используется в Web-сайтах?",
+        "points": 3,
+        "type": "base",
+        "answers": [
+          {
+            "id": 29,
+            "text": "MVVM",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 30,
+            "text": "MVC",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 31,
+            "text": "MVP",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "text": "В чём отличие между HTML4 и HTML5?",
+        "points": 3,
+        "type": "base",
+        "answers": [
+          {
+            "id": 32,
+            "text": "Их нет",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 33,
+            "text": "В циферке",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 34,
+            "text": "Изменено существенное количество тегов",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 35,
+            "text": "Все варианты верны",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "text": "Какой язык используется для разработки Front-приложений",
+        "points": 3,
+        "type": "base",
+        "answers": [
+          {
+            "id": 36,
+            "text": "C#",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 37,
+            "text": "Java",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 38,
+            "text": "Java Script",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 39,
+            "text": "SQL",
+            "isCorrect": false,
+            "isSelected": false
+          }
+        ]
+      }
+    ]
+  }
+]

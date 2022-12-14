@@ -1,0 +1,78 @@
+<div>
+  <h1>Экзамен {{ exam.name }}</h1>
+
+  <div *ngIf="isExamStarted(exam) && !isExamCompleted(exam)">
+    <div *ngFor="let question of exam?.questions">
+      <h3>{{question.text}}</h3>
+
+      <input
+          type="text"
+          value="{{ getTextAnswerValue(exam, question) }}"
+          *ngIf="question.type === 'text'"
+          (change)="setTextAnswer(exam, question, $event)"
+      >
+
+      <div *ngFor="let answer of question.answers">
+        <input
+          id="{{answer.id}}"
+          name="{{question.id}}"
+          type="radio"
+          value="{{answer.id}}"
+          name="radio-input"
+          *ngIf="question.type === 'base'"
+          [checked]="isAnswerSelected(exam, question, answer)"
+          (click)="selectAnswer(exam, question, answer)"
+        >
+
+        <input
+          id="{{answer.id}}"
+          type="checkbox"
+          value="{{answer.id}}"
+          name="radio-input"
+          *ngIf="question.type === 'multiple'"
+          [checked]="isAnswerSelected(exam, question, answer)"
+          (click)="selectAnswer(exam, question, answer)"
+        >
+        <label *ngIf="question.type !== 'text'" for="{{answer.id}}"> {{answer.text}}</label>
+      </div>
+    </div>
+
+    <button  (click)="compliteExam(exam)">Завершить</button>
+  </div>
+
+  <div *ngIf="isExamCompleted(exam)">
+    <h3>Вы завершили экзамен!</h3>
+
+    <h5>Корректно отвечено вопросов:  {{ getCompletedExamCorrectQuestions(exam) }}</h5>
+
+    <h5>Некорректно отвечено вопросов: {{ getCompletedExamUnCorrectQuestions(exam) }}</h5>
+
+    <h5>Итоговая оценка: {{ getCompletedExamScore(exam) }}</h5>
+
+    <h4> История ответов: </h4>
+
+    <div *ngFor="let question of exam?.questions;index as questionIndex">
+      <div *ngIf="question.type !== 'text'">
+        <h5>Вопрос {{ questionIndex + 1 }}: {{ question.text }} </h5>
+
+        <h5>Ответы: </h5>
+
+        <div *ngFor="let answer of getQuestionAnswerHistory(exam, question);index as answerIndex">
+          <p>{{ answerIndex + 1 }}: {{ answer.text }} Корректный: {{ answer.isCorrect ? 'Да' : 'Нет' }}</p>
+        </div>
+        <br>
+      </div>
+    </div>
+    <button (click)="resetExam(exam)">Сбросить результаты</button>
+  </div>
+
+  <a
+      [routerLink]="['/']"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+    >
+      Назад
+    </a>
+</div>
+
+
