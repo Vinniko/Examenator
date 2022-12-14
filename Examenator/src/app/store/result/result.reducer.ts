@@ -4,7 +4,7 @@ import { QUESTION_TYPE_BASE, QUESTION_TYPE_MULTIPLE } from 'src/app/interfaces/I
 import { Result } from 'src/app/models/result';
 import { ResultExam, QuestionResult } from 'src/app/models/resultExam';
 import {
-  select, answer, complite, reset,
+  select, answer, complite, reset, textAnswer,
 } from './result.actions';
 
 export interface ResultState {
@@ -27,6 +27,7 @@ const selectExam = (state: ResultState, { exam }: { exam: Exam }) => {
     tmpQuestions.push({
       questionId: question.id,
       answerId: null,
+      answerText: undefined,
     });
   });
 
@@ -72,6 +73,7 @@ const answerOnQuestion = (
     tmpQuestions.push({
       questionId,
       answerId,
+      answerText: undefined,
     });
     tmpExams[examIndex] = { ...tmpExam, questions: tmpQuestions, answerHistory: history };
   } else {
@@ -81,9 +83,48 @@ const answerOnQuestion = (
       tmpQuestions[questionIndex] = {
         questionId,
         answerId,
+        answerText: undefined,
       };
     }
 
+    tmpExams[examIndex] = { ...tmpExam, questions: tmpQuestions, answerHistory: history };
+  }
+
+  return { ...state, result: new Result(0, '', tmpExams) };
+};
+
+const answerOnTextQuestion = (
+  state: ResultState,
+  {
+    exam, questionId, answerText,
+  }: { exam: Exam, questionId: number, answerText: string },
+) => {
+  const tmpExams: ResultExam[] = [...state.result.exams];
+  const examIndex = tmpExams.findIndex((ex) => ex.examId === exam.id);
+
+  if (examIndex === -1) {
+    return { ...state };
+  }
+
+  const tmpExam: ResultExam = tmpExams[examIndex];
+  const tmpQuestions: QuestionResult[] = [...tmpExam.questions];
+  const history = [...tmpExam.answerHistory];
+
+  const questionIndex = tmpQuestions.findIndex((qn) => qn.questionId === questionId);
+
+  if (questionIndex === -1) {
+    tmpQuestions.push({
+      questionId,
+      answerId: null,
+      answerText,
+    });
+    tmpExams[examIndex] = { ...tmpExam, questions: tmpQuestions, answerHistory: history };
+  } else {
+    tmpQuestions[questionIndex] = {
+      questionId,
+      answerId: null,
+      answerText,
+    };
     tmpExams[examIndex] = { ...tmpExam, questions: tmpQuestions, answerHistory: history };
   }
 
@@ -129,4 +170,5 @@ export const resultReducer = createReducer(
   on(answer, answerOnQuestion),
   on(complite, completeExam),
   on(reset, resetExam),
+  on(textAnswer, answerOnTextQuestion),
 );

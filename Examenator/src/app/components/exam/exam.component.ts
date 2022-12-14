@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {
-  select, answer as setAnswer, complite, reset,
+  select, answer as setAnswer, complite, reset, textAnswer,
 } from 'src/app/store/result/result.actions';
 import { ExamState } from 'src/app/store/exam/exam.reducer';
 import { Exam } from 'src/app/models/exam';
@@ -78,6 +78,18 @@ export class ExamComponent {
     );
   }
 
+  setTextAnswer(exam: Exam, question: IQuestion, event: any): void {
+    if (!this.isExamStarted(exam)) {
+      this.selectExam(exam);
+    }
+
+    this.store.dispatch(
+      textAnswer({
+        exam, questionId: question.id, answerText: event.target.value ?? '',
+      }),
+    );
+  }
+
   isAnswerSelected(exam: Exam, question: IQuestion, answer: Answer): boolean {
     if (this.result) {
       const tmpExam = this.result.exams.find((resultExam) => resultExam.examId === exam.id);
@@ -90,6 +102,21 @@ export class ExamComponent {
     }
 
     return false;
+  }
+
+  getTextAnswerValue(exam: Exam, question: IQuestion): string {
+    if (this.result) {
+      const tmpExam = this.result.exams.find((resultExam) => resultExam.examId === exam.id);
+      const tmpQuestion = tmpExam?.questions.find(
+        (resultQuestion) => (
+          resultQuestion.questionId === question.id
+        ),
+      );
+
+      return tmpQuestion?.answerText ?? '';
+    }
+
+    return '';
   }
 
   compliteExam(exam: Exam): void {

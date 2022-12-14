@@ -130,6 +130,66 @@
             "isSelected": false
           }
         ]
+      },
+      {
+        "id": 11,
+        "text": "Какие типы данных есть в JavaScript?",
+        "points": 1.5,
+        "type": "multiple",
+        "answers": [
+          {
+            "id": 13,
+            "text": "numeric",
+            "isCorrect": true,
+            "isSelected": false
+          },
+          {
+            "id": 14,
+            "text": "integer",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 15,
+            "text": "float",
+            "isCorrect": false,
+            "isSelected": false
+          },
+          {
+            "id": 16,
+            "text": "string",
+            "isCorrect": true,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "text": "Какой спецификатор говорит о том, что переменная неизменяемая?",
+        "points": 3,
+        "type": "text",
+        "answers": [
+          {
+            "id": 40,
+            "text": "const",
+            "isCorrect": true,
+            "isSelected": false
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "text": "Как называется программа, которая переводит программный код в машинный?",
+        "points": 3,
+        "type": "text",
+        "answers": [
+          {
+            "id": 41,
+            "text": "компилятор",
+            "isCorrect": true,
+            "isSelected": false
+          }
+        ]
       }
     ]
   },

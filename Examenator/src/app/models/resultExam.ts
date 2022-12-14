@@ -1,6 +1,7 @@
 export interface QuestionResult {
   questionId: number,
   answerId: number | null,
+  answerText: string | undefined,
 }
 
 export interface AnswerHistory {

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { IQuestion, QUESTION_TYPE_MULTIPLE } from 'src/app/interfaces/IQuestion';
+import { IQuestion, QUESTION_TYPE_MULTIPLE, QUESTION_TYPE_TEXT } from 'src/app/interfaces/IQuestion';
 import { BaseQuestion } from 'src/app/models/baseQuestion';
 import { Exam } from 'src/app/models/exam';
 import { MultipleQuestion } from 'src/app/models/multipleQuestion';
 import { Result } from 'src/app/models/result';
+import { TextQuestion } from 'src/app/models/textQuestion';
 import { setExams } from 'src/app/store/exam/exam.actions';
 import { ExamState } from 'src/app/store/exam/exam.reducer';
 import { select } from 'src/app/store/result/result.actions';
@@ -37,6 +38,15 @@ export class MainComponent implements OnInit {
         if (questionData.type === QUESTION_TYPE_MULTIPLE) {
           questions.push(
             new MultipleQuestion(
+              questionData.id,
+              questionData.text,
+              questionData.points,
+              questionData.answers,
+            ),
+          );
+        } else if (questionData.type === QUESTION_TYPE_TEXT) {
+          questions.push(
+            new TextQuestion(
               questionData.id,
               questionData.text,
               questionData.points,

@@ -5,6 +5,13 @@
     <div *ngFor="let question of exam?.questions">
       <h3>{{question.text}}</h3>
 
+      <input
+          type="text"
+          value="{{ getTextAnswerValue(exam, question) }}"
+          *ngIf="question.type === 'text'"
+          (change)="setTextAnswer(exam, question, $event)"
+      >
+
       <div *ngFor="let answer of question.answers">
         <input
           id="{{answer.id}}"
@@ -26,7 +33,7 @@
           [checked]="isAnswerSelected(exam, question, answer)"
           (click)="selectAnswer(exam, question, answer)"
         >
-        <label for="{{answer.id}}"> {{answer.text}}</label>
+        <label *ngIf="question.type !== 'text'" for="{{answer.id}}"> {{answer.text}}</label>
       </div>
     </div>
 
@@ -45,14 +52,16 @@
     <h4> История ответов: </h4>
 
     <div *ngFor="let question of exam?.questions;index as questionIndex">
-      <h5>Вопрос {{ questionIndex + 1 }}: {{ question.text }} </h5>
+      <div *ngIf="question.type !== 'text'">
+        <h5>Вопрос {{ questionIndex + 1 }}: {{ question.text }} </h5>
 
-      <h5>Ответы: </h5>
+        <h5>Ответы: </h5>
 
-      <div *ngFor="let answer of getQuestionAnswerHistory(exam, question);index as answerIndex">
-        <p>{{ answerIndex + 1 }}: {{ answer.text }} Корректный: {{ answer.isCorrect ? 'Да' : 'Нет' }}</p>
+        <div *ngFor="let answer of getQuestionAnswerHistory(exam, question);index as answerIndex">
+          <p>{{ answerIndex + 1 }}: {{ answer.text }} Корректный: {{ answer.isCorrect ? 'Да' : 'Нет' }}</p>
+        </div>
+        <br>
       </div>
-      <br>
     </div>
     <button (click)="resetExam(exam)">Сбросить результаты</button>
   </div>
